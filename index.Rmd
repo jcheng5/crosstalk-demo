@@ -1,0 +1,61 @@
+---
+title: "Fiji earthquakes"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(crosstalk)
+
+quakes <- cbind(quakes, sample = sample.int(nrow(quakes), nrow(quakes)))
+sd <- SharedData$new(quakes)
+```
+
+Inputs {.sidebar}
+-----------------------------------------------------------------------
+
+```{r}
+filter_slider("mag", "Magnitude", sd, "mag")
+filter_slider("depth", "Depth", sd, "depth")
+filter_slider("sample", "Sample", sd, "sample")
+```
+
+Column 1
+-----------------------------------------------------------------------
+
+### Map
+
+```{r}
+library(leaflet)
+leaflet(sd) %>% addTiles() %>% addMarkers()
+```
+
+### Scatter
+
+```{r}
+library(plotly)
+plot_ly(sd, x = mag, y = stations, mode = "markers") %>%
+  layout(dragmode = "select")
+```
+
+Column 2
+-----------------------------------------------------------------------
+
+### Table
+
+```{r}
+library(DT)
+library(dplyr)
+
+sdNoSample <- sd$transform(function(df) select(df, -sample))
+
+datatable(sdNoSample, extensions = 'Scroller', options = list(
+  scrollY = 200,
+  scroller = TRUE
+))
+```
+

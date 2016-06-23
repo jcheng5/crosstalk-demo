@@ -8,6 +8,7 @@ output:
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
+library(crosstalk)
 library(dplyr)
 
 earthquake_classes <- c(Minor = 3, Light = 4, Moderate = 5,
@@ -21,6 +22,16 @@ quakes$class <- droplevels(factor(
 
 set.seed(10101)
 quakes <- quakes %>% sample_n(200)
+
+sd <- SharedData$new(quakes)
+```
+
+Inputs {.sidebar}
+-----------------------------------------------------------------------
+
+```{r}
+filter_slider("mag", "Magnitude", sd, ~mag)
+filter_slider("depth", "Depth", sd, ~depth)
 ```
 
 Column 1
@@ -30,7 +41,7 @@ Column 1
 
 ```{r}
 library(leaflet)
-leaflet(quakes) %>% addTiles() %>% addCircles(
+leaflet(sd) %>% addTiles() %>% addCircles(
   radius = ~mag * 10000, weight = 1, fillOpacity = 0.6,
   label = ~as.character(mag)
 )
@@ -40,7 +51,7 @@ leaflet(quakes) %>% addTiles() %>% addCircles(
 
 ```{r}
 library(d3scatter)
-d3scatter(quakes, x = ~depth, y = ~stations, color = ~class)
+d3scatter(sd, x = ~depth, y = ~stations, color = ~class)
 ```
 
 Column 2
@@ -50,7 +61,7 @@ Column 2
 
 ```{r}
 library(DT)
-datatable(quakes, rownames = FALSE, extensions = 'Scroller', options = list(
+datatable(sd, rownames = FALSE, extensions = 'Scroller', options = list(
   scrollY = 200,
   scroller = TRUE
 ))

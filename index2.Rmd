@@ -12,14 +12,7 @@ library(flexdashboard)
 library(crosstalk)
 library(dplyr)
 
-earthquake_classes <- c(Minor = 3, Light = 4, Moderate = 5,
-  Strong = 6, Major = 7, Great = 8
-)
-
-quakes$class <- droplevels(factor(
-  names(earthquake_classes)[match(trunc(quakes$mag), earthquake_classes)],
-  unique(names(earthquake_classes)),
-  ordered = TRUE))
+quakes$class <- factor(floor(quakes$mag), labels = c("Light", "Moderate", "Strong"))
 
 set.seed(10101)
 quakes <- quakes %>% sample_n(200)
@@ -31,7 +24,7 @@ Inputs {.sidebar}
 -----------------------------------------------------------------------
 
 ```{r}
-filter_slider("mag", "Magnitude", sd, ~mag)
+filter_slider("mag", "Magnitude", sd, ~mag, step = 0.1)
 filter_slider("depth", "Depth", sd, ~depth)
 ```
 
@@ -42,9 +35,10 @@ Column 1
 
 ```{r}
 library(leaflet)
+pal <- colorFactor(c("#1f77bf", "#ff7f0e", "#2ca02c"), quakes$class)
 leaflet(sd) %>% addTiles() %>% addCircles(
-  radius = ~mag * 10000, weight = 1, fillOpacity = 0.6,
-  label = ~as.character(mag)
+  radius = ~mag * 7000, weight = 1, fillOpacity = 0.8,
+  label = ~as.character(mag), color = ~pal(class)
 )
 ```
 

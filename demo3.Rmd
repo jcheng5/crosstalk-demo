@@ -11,6 +11,7 @@ runtime: shiny
 library(flexdashboard)
 library(crosstalk)
 library(dplyr)
+library(shiny)
 
 quakes$class <- factor(floor(quakes$mag), labels = c("Light", "Moderate", "Strong"))
 

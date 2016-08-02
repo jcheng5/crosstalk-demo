@@ -27,7 +27,7 @@ filter_slider("mag", "Magnitude", sd, ~mag, step = 0.1)
 filter_slider("depth", "Depth", sd, ~depth)
 ```
 
-Column 1
+Row 1
 -----------------------------------------------------------------------
 
 ### Map
@@ -48,7 +48,7 @@ library(d3scatter)
 d3scatter(sd, x = ~depth, y = ~stations, color = ~class)
 ```
 
-Column 2
+Row 2
 -----------------------------------------------------------------------
 
 ### Table

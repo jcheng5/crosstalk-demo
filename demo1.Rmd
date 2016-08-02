@@ -16,7 +16,7 @@ set.seed(10101)
 quakes <- quakes %>% sample_n(200)
 ```
 
-Column 1
+Row 1
 -----------------------------------------------------------------------
 
 ### Map
@@ -37,7 +37,7 @@ library(d3scatter)
 d3scatter(quakes, x = ~depth, y = ~stations, color = ~class)
 ```
 
-Column 2
+Row 2
 -----------------------------------------------------------------------
 
 ### Table

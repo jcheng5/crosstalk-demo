@@ -24,7 +24,7 @@ Row 1
 ```{r}
 library(leaflet)
 pal <- colorFactor(c("#1f77bf", "#ff7f0e", "#2ca02c"), quakes$class)
-leaflet(quakes) %>% addTiles() %>% addCircles(
+leaflet(quakes) %>% addTiles() %>% addCircles(lng = ~long, lat = ~lat,
   radius = ~mag * 7000, weight = 1, fillOpacity = 0.8,
   label = ~as.character(mag), color = ~pal(class)
 )
@@ -33,8 +33,10 @@ leaflet(quakes) %>% addTiles() %>% addCircles(
 ### Scatter
 
 ```{r}
-library(d3scatter)
-d3scatter(quakes, x = ~depth, y = ~stations, color = ~class)
+library(plotly)
+plot_ly(quakes) %>%
+  add_markers(x = ~depth, y = ~stations, color = ~class, mode = "markers") %>%
+  layout(dragmode = "select")
 ```
 
 Row 2

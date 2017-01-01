@@ -45,8 +45,10 @@ leaflet(sd) %>% addTiles() %>% addCircles(
 ### Scatter
 
 ```{r}
-library(d3scatter)
-d3scatter(sd, x = ~depth, y = ~stations, color = ~class)
+library(plotly)
+plot_ly(sd) %>%
+  add_markers(x = ~depth, y = ~stations, color = ~class, mode = "markers") %>%
+  layout(dragmode = "select", showlegend = FALSE)
 ```
 
 ### Histogram
